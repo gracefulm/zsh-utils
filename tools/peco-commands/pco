@@ -1,0 +1,16 @@
+#!/bin/bash -e
+
+#
+# defined constant
+#
+readonly TARGET_BRANCH=$(git branch | peco --prompt "git branch>" | head -n 1 | sed -e "s/^\*\s*//g")
+
+# select a condition from the menu and execute the action
+if [ -z $TARGET_BRANCH ]; then
+    echo "Canceled or something went wrong"
+    exit 1
+else
+    echo $TARGET_BRANCH
+    git checkout $TARGET_BRANCH
+fi
+
