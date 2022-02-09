@@ -1,0 +1,52 @@
+#!/bin/bash -e
+
+#
+# defined constants
+#
+# actions on target branches 
+declare -a actions
+actions=(
+    ">> delete\n>> delete(force)"
+    ">> switch\n>> delete\n>> delete(force)"
+)
+# prompt of peco
+readonly PECO_PROMPT="chose action>"
+# select branches with peco 
+readonly TARGET_BRANCH=$(git branch | peco --prompt "git branch>" | sed -e "s/^\*\s*//g" | sed "s/^[ \t]*//g" )
+# number of selected branches
+readonly BRANCH_NUM=`echo $TARGET_BRANCH | wc -w`
+
+# select a condition from the menu and execute the action
+if [ ${#TARGET_BRANCH} -eq 0 ]; then
+    echo "Did not hit or canceled"
+	exit 1
+elif [ $BRANCH_NUM -gt 1 ]; then
+    action="`echo -e ${actions[0]} | peco --prompt "$PECO_PROMPT"`"
+    TARGET_BRANCH="`echo $TARGET_BRANCH | tr "\n" " " `"
+    if [[ "$action" = ">> delete" ]]; then
+        echo "$action on $TARGET_BRANCH"
+        eval git branch -d $TARGET_BRANCH
+    elif [[ "$action" = ">> delete(force)" ]]; then
+        echo "$action on $TARGET_BRANCH"
+        eval git branch -D $TARGET_BRANCH
+    else
+        echo "Canceled or something went wrong"
+        exit 1
+    fi
+else
+    action="`echo -e ${actions[1]} | peco --prompt "$PECO_PROMPT"`"
+    if [[ "$action" = ">> switch" ]]; then
+        echo "$action on $TARGET_BRANCH"
+        git switch $TARGET_BRANCH
+    elif [[ "$action" = ">> delete" ]]; then
+        echo "$action on $TARGET_BRANCH"
+        git branch -d $TARGET_BRANCH
+    elif [[ "$action" = ">> delete(force)" ]]; then
+        echo "$action on $TARGET_BRANCH"
+        eval git branch -D $TARGET_BRANCH
+    else
+        echo "Canceled or something went wrong"
+        exit 1
+    fi
+fi
+
