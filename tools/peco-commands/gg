@@ -1,0 +1,62 @@
+#!/bin/bash -e
+
+#
+# defined constants
+#
+# actions on target files
+declare -a actions
+actions=(
+    ">> view\n>> edit(with buffer)"
+    ">> view\n>> edit"
+)
+# prompt of peco
+readonly PECO_PROMOT="chose action>"
+# selected files by git grep with peco
+readonly SELECTED_FILE_AND_LINES=$(git grep -in $1 | peco --prompt "git grep>" | awk -F: '{printf "+"$2" "$1" "}')
+readonly SELECTED_FILES_NUM="`echo $SELECTED_FILE_AND_LINES | sed 's/\+[0-9]*//g' | tr ' ' '\n' | wc -w`"
+# files without duplicates
+readonly UNIQUED_FILES="`echo $SELECTED_FILE_AND_LINES | sed 's/\+[0-9]*//g' | tr ' ' '\n' | sort -u`"
+readonly UNIQUED_FILES_NUM="`echo $SELECTED_FILE_AND_LINES | sed 's/\+[0-9]*//g' | tr ' ' '\n' | sort -u | wc -w`"
+
+# slect a condition from the menu and execute the action
+if [ $SELECTED_FILES_NUM -eq 0 ]; then
+    echo "Did not hit or canceled"
+    exit 1
+elif [ $SELECTED_FILES_NUM -gt 1 -a $UNIQUED_FILES_NUM -gt 1 ]; then
+    action="`echo -e ${actions[0]} | peco --prompt "$PECO_PROMOT"`"
+    if [[ "$action" = ">> edit(with buffer)" ]]; then
+        echo "$action on $UNIQUED_FILES"
+        eval vim $UNIQUED_FILES
+    elif [[ "$action" = ">> view" ]]; then
+        echo "$action on $UNIQUED_FILES"
+        eval bat $UNIQUED_FILES
+    else
+        echo "Canceled or something went wrong"
+        exit 1
+    fi
+elif [ $SELECTED_FILES_NUM -gt 1 -a $UNIQUED_FILES_NUM -eq 1 ]; then
+    action="`echo -e ${actions[1]} | peco --prompt "$PECO_PROMOT"`"
+    if [[ "$action" = ">> edit" ]]; then
+        echo "$action on $UNIQUED_FILES"
+        eval vim $UNIQUED_FILES
+    elif [[ "$action" = ">> view" ]]; then
+        echo "$action on $UNIQUED_FILES"
+        bat $UNIQUED_FILES
+    else
+        echo "Canceled or something went wrong"
+        exit 1
+    fi
+else
+    action="`echo -e ${actions[1]} | peco --prompt "$PECO_PROMOT"`"
+    if [[ "$action" = ">> edit" ]]; then
+        echo "$action on $UNIQUED_FILES"
+        eval vim $SELECTED_FILE_AND_LINES
+    elif [[ "$action" = ">> view" ]]; then 
+        echo "$action on $UNIQUED_FILES"
+        bat $UNIQUED_FILES 
+    else
+        echo "Canceled or something went wrong"
+        exit 1
+    fi
+fi
+
