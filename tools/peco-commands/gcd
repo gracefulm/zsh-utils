@@ -1,0 +1,16 @@
+#!/bin/bash -e
+
+# target git project directory path
+readonly DIR="$(ghq root)/$(ghq list | peco --prompt "git repository>")"
+
+# move to DIR
+if [ ${#DIR} -ge 1 ]; then
+	echo "cd $DIR"
+    cd $DIR
+	# TODO これで良いのかわからない。無理にコマンド化しなくよも良い気がしてきた
+	$SHELL
+else
+    echo "Canceled or something went wrong"
+    exit 1
+fi
+
