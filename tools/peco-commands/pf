@@ -1,0 +1,110 @@
+#!/bin/bash -e
+
+#
+# define constants
+#
+readonly COMMAND_NAME=$(basename "$0")
+readonly COLOR_RED=$(printf "\033[38;5;1m")
+readonly COLOR_OFF=$(printf "\033[m")
+
+declare -a actions
+actions=(
+    ">> view\n>> edit(with buffer)"
+    ">> view\n>> edit"
+    ">> ls\n>> show path"
+)
+readonly PECO_PROMPT="choose action>"
+
+# help
+function usage() {
+    cat <<EOM
+Usage: $COMMAND_NAME [-h | --help] [-f] [-d]
+    -h | --help      Display this command usage
+    -f               Search for files under the current directory
+    -d               Search for directiories under the current directory
+EOM
+}
+
+# find files
+function pff() {
+    local _selected_files=`find . -type f | peco --prompt "find file>"`
+    local _selected_files_num=`echo $_selected_files | sed 's/\+[0-9]*//g' | tr ' ' '\n' | wc -w`
+    if [ $_selected_files_num -eq 0 ]; then
+        echo "Did not hit or canceled" >&2
+        exit 1
+    elif [ $_selected_files_num -gt 1 ]; then
+        action="`echo -e ${actions[0]} | peco --prompt "$PECO_PROMPT"`"
+        if [[ "$action" = ">> edit(with buffer)" ]]; then
+            echo "$action on $_selected_files"
+            eval vim $_selected_files
+        elif [[ "$action" = ">> view" ]]; then
+            echo "$action on $_selected_files"
+            bat $_selected_files
+        else
+            echo "Canceled or something went wrong" >&2
+        exit 1
+            exit 1
+        fi
+    else
+        action="`echo -e ${actions[1]} | peco --prompt "$PECO_PROMPT"`"
+        if [[ "$action" = ">> edit" ]]; then
+            echo "$action on $_selected_files"
+            eval vim $_selected_files
+        elif [[ "$action" = ">> view" ]]; then
+            echo "$action on $_selected_files"
+            bat $_selected_files
+        else
+            echo "Canceled or something went wrong" >&2
+            exit 1
+        fi
+    fi
+}
+
+# find directories
+function pfd() {
+    local _selected_directories=`find . -type d | peco --prompt "find directory>"`
+    local _selected_directories_num=`echo $_selected_directories| sed 's/\+[0-9]*//g' | tr ' ' '\n' | wc -w`
+    if [ $_selected_directories_num -eq 0 ]; then
+        echo "Did not hit or canceled" >&2
+        exit 1
+    elif [ $_selected_directories_num -gt 1 ]; then
+        echo "You can choose just one directory" >&2
+        exit 1
+    else
+        action="`echo -e ${actions[2]} | peco --prompt "$PECO_PROMPT"`"
+        if [[ "$action" = ">> ls" ]]; then
+            echo "$action on $_selected_directories"
+            ls -FGla $_selected_directories
+        elif [[ "$action" = ">> show path" ]]; then
+            echo "$action on $_selected_directories"
+            echo $_selected_directories
+            echo $_selected_directories | pbcopy
+        else
+            echo "Canceled or something went wrong" >&2
+            exit 1
+        fi
+    fi
+} 
+
+# separate processing for each option
+if [ $# -eq 0 ]; then
+    echo "default process"
+    find . | peco --prompt "find>"
+elif [ $# -gt 1 ]; then
+    echo "${COLOR_RED}ERROR: too many arguments${COLOR_OFF}" >&2
+    usage
+    exit 1
+else
+    if [ $1 = "-h" -o $1 = "--help" ]; then
+        usage
+    elif [ $1 = "-f" ]; then
+        pff
+    elif [ $1 = "-d" ]; then
+        pfd
+    else
+        echo "${COLOR_RED}ERROR: invalid option [$1]${COLOR_OFF}" >&2
+        usage
+        exit 1
+    fi
+fi
+
