@@ -7,7 +7,7 @@ readonly TARGET_BRANCH=$(git branch | peco --prompt "git branch>" | head -n 1 | 
 
 # select a condition from the menu and execute the action
 if [ -z $TARGET_BRANCH ]; then
-    echo "Canceled or something went wrong"
+    echo "Canceled or something went wrong" >&2
     exit 1
 else
     echo $TARGET_BRANCH

@@ -10,7 +10,7 @@ actions=(
     ">> switch\n>> delete\n>> delete(force)"
 )
 # prompt of peco
-readonly PECO_PROMPT="chose action>"
+readonly PECO_PROMPT="choose action>"
 # select branches with peco 
 readonly TARGET_BRANCH=$(git branch | peco --prompt "git branch>" | sed -e "s/^\*\s*//g" | sed "s/^[ \t]*//g" )
 # number of selected branches
@@ -18,8 +18,8 @@ readonly BRANCH_NUM=`echo $TARGET_BRANCH | wc -w`
 
 # select a condition from the menu and execute the action
 if [ ${#TARGET_BRANCH} -eq 0 ]; then
-    echo "Did not hit or canceled"
-	exit 1
+    echo "Did not hit or canceled" >&2
+   exit 1
 elif [ $BRANCH_NUM -gt 1 ]; then
     action="`echo -e ${actions[0]} | peco --prompt "$PECO_PROMPT"`"
     TARGET_BRANCH="`echo $TARGET_BRANCH | tr "\n" " " `"
@@ -30,7 +30,7 @@ elif [ $BRANCH_NUM -gt 1 ]; then
         echo "$action on $TARGET_BRANCH"
         eval git branch -D $TARGET_BRANCH
     else
-        echo "Canceled or something went wrong"
+        echo "Canceled or something went wrong" >&2
         exit 1
     fi
 else
@@ -45,7 +45,7 @@ else
         echo "$action on $TARGET_BRANCH"
         eval git branch -D $TARGET_BRANCH
     else
-        echo "Canceled or something went wrong"
+        echo "Canceled or something went wrong" >&2
         exit 1
     fi
 fi

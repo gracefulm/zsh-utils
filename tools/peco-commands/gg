@@ -10,7 +10,7 @@ actions=(
     ">> view\n>> edit"
 )
 # prompt of peco
-readonly PECO_PROMOT="chose action>"
+readonly PECO_PROMOT="choose action>"
 # selected files by git grep with peco
 readonly SELECTED_FILE_AND_LINES=$(git grep -in $1 | peco --prompt "git grep>" | awk -F: '{printf "+"$2" "$1" "}')
 readonly SELECTED_FILES_NUM="`echo $SELECTED_FILE_AND_LINES | sed 's/\+[0-9]*//g' | tr ' ' '\n' | wc -w`"
@@ -20,7 +20,7 @@ readonly UNIQUED_FILES_NUM="`echo $SELECTED_FILE_AND_LINES | sed 's/\+[0-9]*//g'
 
 # slect a condition from the menu and execute the action
 if [ $SELECTED_FILES_NUM -eq 0 ]; then
-    echo "Did not hit or canceled"
+    echo "Did not hit or canceled" >&2
     exit 1
 elif [ $SELECTED_FILES_NUM -gt 1 -a $UNIQUED_FILES_NUM -gt 1 ]; then
     action="`echo -e ${actions[0]} | peco --prompt "$PECO_PROMOT"`"
@@ -31,7 +31,7 @@ elif [ $SELECTED_FILES_NUM -gt 1 -a $UNIQUED_FILES_NUM -gt 1 ]; then
         echo "$action on $UNIQUED_FILES"
         eval bat $UNIQUED_FILES
     else
-        echo "Canceled or something went wrong"
+        echo "Canceled or something went wrong" >&2
         exit 1
     fi
 elif [ $SELECTED_FILES_NUM -gt 1 -a $UNIQUED_FILES_NUM -eq 1 ]; then
@@ -43,7 +43,7 @@ elif [ $SELECTED_FILES_NUM -gt 1 -a $UNIQUED_FILES_NUM -eq 1 ]; then
         echo "$action on $UNIQUED_FILES"
         bat $UNIQUED_FILES
     else
-        echo "Canceled or something went wrong"
+        echo "Canceled or something went wrong" >&2
         exit 1
     fi
 else
@@ -55,7 +55,7 @@ else
         echo "$action on $UNIQUED_FILES"
         bat $UNIQUED_FILES 
     else
-        echo "Canceled or something went wrong"
+        echo "Canceled or something went wrong" >&2
         exit 1
     fi
 fi

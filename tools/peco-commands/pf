@@ -78,6 +78,7 @@ function pfd() {
         elif [[ "$action" = ">> show path" ]]; then
             echo "$action on $_selected_directories"
             echo $_selected_directories
+            # save directory path on a clipboad(only macOS)
             echo $_selected_directories | pbcopy
         else
             echo "Canceled or something went wrong" >&2
