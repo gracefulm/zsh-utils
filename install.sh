@@ -14,12 +14,13 @@ read -p "${COLOR_GREEN}enter dir name > ${COLOR_OFF}" ROOT_DIR
 readonly TARGET_DIR="$HOME/$ROOT_DIR"
 
 # paths of command files that will install
-readonly DIR=$(cd $(dirname $0); pwd)
-COMMAND_FILES="$DIR/tools/show256 "
-COMMAND_FILES+="$DIR/tools/peco-commands/gg "
-COMMAND_FILES+="$DIR/tools/peco-commands/pbr "
-COMMAND_FILES+="$DIR/tools/peco-commands/pco "
-COMMAND_FILES+="$DIR/tools/peco-commands/pf "
+readonly DIR=$(cd $(dirname $0)/tools; pwd)
+COMMAND_FILES="$DIR/show256 "
+COMMAND_FILES+="$DIR/google "
+COMMAND_FILES+="$DIR/peco-commands/gg "
+COMMAND_FILES+="$DIR/peco-commands/pbr "
+COMMAND_FILES+="$DIR/peco-commands/pco "
+COMMAND_FILES+="$DIR/peco-commands/pf "
 
 # install commands under TARGET_DIR
 echo ""
