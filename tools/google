@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Define a constants
+readonly WEB_SEARCH_ENGINE="http://www.google.co.jp/search?q="
+
+#  Search key words on Google Chrome
+if [ $# != 0 ]; then
+    _args=""
+     for i in $*; do
+         _args="$_args${_args:++}$i"
+     done
+     # Build search url
+     URL="${WEB_SEARCH_ENGINE}${_args}"
+ fi
+ open -a Google\ Chrome $URL
+
