@@ -1,0 +1,24 @@
+#!/bin/zsh -e
+
+#
+# gcd is a function that enable to move  efficiently to a project managed by ghq.
+#
+function gcd() {
+    readonly _root=$(ghq root)
+    readonly _context_path=$(ghq list | peco --query "$LBUFFER" --prompt "git repository>")
+    readonly _project_path=$_root/$_context_path
+
+    # move to the selected git project
+    if [ ${#_context_path} -eq 0 ]; then
+        if zle; then
+            :
+        else
+            echo "Canceled or something went wrong" >&2
+            return 1
+        fi
+    else
+        # target git project directory path
+        _insert-command-line "cd $_project_path"
+    fi
+}
+
