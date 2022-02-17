@@ -1,16 +1,13 @@
-#!/bin/bash -e
+#!/bin/zsh -e
 
-#
-# defined constant
-#
-readonly TARGET_BRANCH=$(git branch | peco --prompt "git branch>" | head -n 1 | sed -e "s/^\*\s*//g")
+function pco() {
+    readonly _target_branch=$(git branch | peco --prompt "git branch>" | head -n 1 | sed -e "s/^\*\s*//g" | tr -d " ")
 
-# select a condition from the menu and execute the action
-if [ -z $TARGET_BRANCH ]; then
-    echo "Canceled or something went wrong" >&2
-    exit 1
-else
-    echo $TARGET_BRANCH
-    git checkout $TARGET_BRANCH
-fi
-
+    # select a condition from the menu and execute the action
+    if [ -z $_target_branch ]; then
+        echo "Canceled or something went wrong" >&2
+        return 1
+    else
+        git checkout $_target_branch
+    fi
+}
