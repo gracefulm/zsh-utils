@@ -6,11 +6,11 @@ readonly COLOR_OFF=$(printf "\033[m")
 
 # determine a place of installation
 cat << EOM
-Creating a directory \$HOME/.utils
+Creating a directory \$HOME/.zsh-utils
 And then, installing the commands under that directory.
 
 EOM
-readonly TARGET_DIR="$HOME/.utils"
+readonly TARGET_DIR="$HOME/.zsh-utils"
 
 # paths of command files that will install
 readonly CURRENT_DIR=$(cd $(dirname $0); pwd)
@@ -27,9 +27,9 @@ COMMAND_FILES+="$DIR/peco-commands/pf "
 # optional script
 readonly OPTIONAL_SCRIPT=$(
 cat << EOM
-# utils init
-FPATH=\$HOME/.utils:\$FPATH
-autoload -Uz utils-entory-point && utils-entory-point
+# zsh-utils init
+FPATH=\$HOME/.zsh-utils:\$FPATH
+autoload -Uz zsh-util & zsh-utils
 ## bindkey
 bindkey '^g' gcd
 EOM
@@ -38,7 +38,7 @@ EOM
 # install commands under TARGET_DIR
 echo ">> Installing commands under $TARGET_DIR ..."
 install -d -m 0755 $TARGET_DIR
-install -m 0755 $CURRENT_DIR/utils-entory-point $TARGET_DIR
+install -m 0755 $CURRENT_DIR/zsh-utils $TARGET_DIR
 install -d -m 0755 $TARGET_DIR/tools
 install -m 0755 $(echo $COMMAND_FILES) $TARGET_DIR/tools
 echo ">> done"
