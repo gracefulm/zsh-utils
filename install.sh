@@ -15,11 +15,13 @@ readonly TARGET_DIR="$HOME/.zsh-utils"
 # paths of command files that will install
 readonly CURRENT_DIR=$(cd $(dirname $0); pwd)
 readonly DIR=$(cd $(dirname $0)/tools; pwd)
-COMMAND_FILES="$DIR/_insert-command-line "
+COMMAND_FILES="$DIR/_exec-command "
+COMMAND_FILES+="$DIR/_insert-command "
 COMMAND_FILES+="$DIR/show256 "
 COMMAND_FILES+="$DIR/google "
 COMMAND_FILES+="$DIR/peco-commands/gcd "
 COMMAND_FILES+="$DIR/peco-commands/gg "
+COMMAND_FILES+="$DIR/peco-commands/phis "
 COMMAND_FILES+="$DIR/peco-commands/pbr "
 COMMAND_FILES+="$DIR/peco-commands/pco "
 COMMAND_FILES+="$DIR/peco-commands/pf "
@@ -29,9 +31,10 @@ readonly OPTIONAL_SCRIPT=$(
 cat << EOM
 # zsh-utils init
 FPATH=\$HOME/.zsh-utils:\$FPATH
-autoload -Uz zsh-util & zsh-utils
+autoload -Uz zsh-utils && zsh-utils
 ## bindkey
 bindkey '^g' gcd
+bindkey '^r' phis
 EOM
 )
 
