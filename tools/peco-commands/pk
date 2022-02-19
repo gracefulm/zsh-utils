@@ -1,0 +1,13 @@
+#!/bin/zsh -e
+
+#
+# pk is a function that kill selected processes
+#
+function pk() {
+    for pid in `ps aux | peco --prompt "pkill>" | awk '{ print $2 }'`
+    do
+        kill $pid
+        echo "Killd ${pid}"
+    done
+}
+
