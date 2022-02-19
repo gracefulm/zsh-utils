@@ -40,7 +40,7 @@ Second of all, you need to install below in advance.
     Usage: pf [-h | --help] [-f] [-d]
     -h | --help      Display this command usage
     -f               Search for files under the current directory
-    -d               Search for directiories under the current directory
+    -d               Search for directories under the current directory
     ```
 
   - **phis**
