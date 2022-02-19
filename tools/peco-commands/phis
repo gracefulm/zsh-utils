@@ -5,11 +5,15 @@
 #
 function phis() {
     local _target_command=$(history -n -r 1 | peco --prompt "history>" --query "$LBUFFER")
-    if [ ${#_target_command} -gt 0 ]; then
-        _insert-command $_target_command
+    if [ ${#_target_command} -eq 0 ]; then
+        if zle; then
+            :
+        else
+            echo "Canceled or something went wrong" >&2
+            return 1
+        fi
     else
-        echo "Canceled or something went wrong" >&2
-        return 1
+        _insert-command $_target_command
     fi
 }
 
