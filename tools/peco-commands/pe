@@ -5,11 +5,11 @@
 #
 function pe() {
     local _target_container="$(docker ps | peco --prompt "docker container>" | cut -d " " -f 1)"
-    if [ -n $_target_container ]; then
-        _exec-command "docker exec -it $_target_container /bin/bash"
-    else
+    if [ ${#_target_container} -eq 0 ]; then
         echo "Canceled or something went wrong" >&2
         return 1
+    else
+        _exec-command "docker exec -it $_target_container /bin/bash"
     fi
 }
 
