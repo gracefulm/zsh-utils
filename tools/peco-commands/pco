@@ -1,5 +1,8 @@
 #!/bin/zsh -e
 
+#
+# pco is a function that enable to do git checkout easily
+#
 function pco() {
     readonly _target_branch=$(git branch | peco --prompt "git branch>" | head -n 1 | sed -e "s/^\*\s*//g" | tr -d " ")
 
