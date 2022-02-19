@@ -29,7 +29,7 @@ function usage() {
 Usage: $COMMAND_NAME [-h | --help] [-f] [-d]
     -h | --help      Display this command usage
     -f               Search for files under the current directory
-    -d               Search for directiories under the current directory
+    -d               Search for directories under the current directory
 EOM
 }
 
