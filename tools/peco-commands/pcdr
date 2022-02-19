@@ -1,0 +1,15 @@
+#!/bin/zsh -e
+
+#
+# pcdr is a function that can easily move to the directory that you moved in the past
+#
+function pcdr() {
+    local _target_dir="$(cdr -l | peco --prompt "cdr>" | awk '{print $2}')"
+    if [ ${#_target_dir} -eq 0 ]; then
+        echo "Canceled or something went wrong" >&2
+        return 1
+    else
+        _exec-command "cd ${_target_dir}"
+    fi
+}
+
