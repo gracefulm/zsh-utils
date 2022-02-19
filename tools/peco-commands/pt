@@ -1,0 +1,20 @@
+#!/bin/zsh -e
+
+#
+# pt is a function that can be attached to tmux session
+#
+function pt() {
+    local _sessions="$(tmux ls)"
+    local _new_session="Create a new session"
+    local _options="${_new_session}\n${_sessions}"
+    local _selected_session="$(echo -e "$_options" | peco --prompt "tmux session>" | cut -d: -f1)"
+    if [ -z $_selected_session ]; then
+        echo "Canceled or something went wrong" >&2
+        return 1
+    elif [ $_selected_session = "$_new_session" ]; then
+        tmux new-session
+    else
+        tmux attach-session -t $_selected_session
+    fi
+}
+
