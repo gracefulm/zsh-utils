@@ -1,13 +1,13 @@
 #!/bin/zsh -e
 
 function() {
-	FPATH=$FPATH:$HOME/.zsh-utils/tools
+    FPATH=$FPATH:$HOME/.zsh-utils/tools
 
-	for file in $HOME/.zsh-utils/tools/*(N-.); do
-    func=$(basename $file)
-    autoload -Uz $func
-    zle -N $func
-  done
+    for file in $HOME/.zsh-utils/tools/*(N-.); do
+        func=$(basename $file)
+        autoload -Uz $func
+        zle -N $func
+    done
 }
 
 function zsh-utils(){}

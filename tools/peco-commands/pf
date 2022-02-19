@@ -85,7 +85,7 @@ function pfd() {
             eval ls -FGla $_selected_directories
         elif [[ "$action" = "${actions[change-dir]}" ]]; then
             echo "$action on $_selected_directories"
-            _insert-command-line "cd $_selected_directories"
+            _exec-coommand "cd $_selected_directories"
         else
             echo "Canceled or something went wrong" >&2
             return 1

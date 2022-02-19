@@ -18,7 +18,7 @@ function gcd() {
         fi
     else
         # target git project directory path
-        _insert-command-line "cd $_project_path"
+        _exec-coommand "cd $_project_path"
     fi
 }
 
