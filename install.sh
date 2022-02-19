@@ -26,6 +26,7 @@ COMMAND_FILES+="$DIR/peco-commands/pbr "
 COMMAND_FILES+="$DIR/peco-commands/pcd "
 COMMAND_FILES+="$DIR/peco-commands/pcdr "
 COMMAND_FILES+="$DIR/peco-commands/pco "
+COMMAND_FILES+="$DIR/peco-commands/pe "
 COMMAND_FILES+="$DIR/peco-commands/pf "
 
 # optional script
