@@ -28,6 +28,7 @@ COMMAND_FILES+="$DIR/peco-commands/pcdr "
 COMMAND_FILES+="$DIR/peco-commands/pco "
 COMMAND_FILES+="$DIR/peco-commands/pe "
 COMMAND_FILES+="$DIR/peco-commands/pf "
+COMMAND_FILES+="$DIR/peco-commands/pt "
 
 # optional script
 readonly OPTIONAL_SCRIPT=$(
