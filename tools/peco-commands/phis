@@ -1,0 +1,15 @@
+#!/bin/zsh -e
+
+#
+# phis is a function that enable to select a coomand that was executed in the past
+#
+function phis() {
+    local _target_command=$(history -n -r 1 | peco --prompt "history>" --query "$LBUFFER")
+    if [ ${#_target_command} -gt 0 ]; then
+        _insert-command $_target_command
+    else
+        echo "Canceled or something went wrong" >&2
+        return 1
+    fi
+}
+
