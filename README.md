@@ -1,9 +1,63 @@
-# utils
+# zsh-utils
+
 This repository manages handy command line tools.
 
-## Contens of tools (TBD)
+## Dependent tools
 
+First of all, it is assumed that your terminal is running in `zsh`.
+Second of all, you need to install below in advance.
+
+- bat
+- cdr
+- docker
+- ghq
 - peco
-- show 256 colors
-- google serch
+- tmux
+- vim
 
+## Contents of tools
+
+- functions with peco
+  - **gcd**
+    - gcd is a function that enable to move  efficiently to a project managed by ghq
+  - **gg**
+    - gg is a function that can search with git grep and use peco to perform actions such as editing and browsing on the selected files
+  - **pbr**
+    - pbr is a function that enable to operate git branch efficiently
+  - **pcd**
+    - pcd is a function that execute cd command with peco
+  - **pcdr**
+    - pcdr is a function that can easily move to the directory that you moved in the past
+  - **pco**
+    - pco is a function that enable to do git checkout easily
+  - **pe**
+    - pe is a function that enable to enter the selected container
+  - **pf**
+    - pf is a function that enable to operate selected file/directory
+    - pf has some options
+
+    ```shell
+    Usage: pf [-h | --help] [-f] [-d]
+    -h | --help      Display this command usage
+    -f               Search for files under the current directory
+    -d               Search for directories under the current directory
+    ```
+
+  - **phis**
+    - phis is a function that enable to select a command that was executed in the past
+  - **pk**
+    - pk is a function that kill selected processes
+  - **pt**
+    - pt is a function that can be attached to tmux session
+- other functions
+  - **google**
+    - Search key words on Google Chrome
+  - **show256**
+    - Show 256 colors
+
+## Installation
+
+```shell
+https://github.com/masaki-miura/zsh-utils.git
+./install.sh
+```
