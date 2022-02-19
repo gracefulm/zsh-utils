@@ -23,6 +23,7 @@ COMMAND_FILES+="$DIR/peco-commands/gcd "
 COMMAND_FILES+="$DIR/peco-commands/gg "
 COMMAND_FILES+="$DIR/peco-commands/phis "
 COMMAND_FILES+="$DIR/peco-commands/pbr "
+COMMAND_FILES+="$DIR/peco-commands/pcdr "
 COMMAND_FILES+="$DIR/peco-commands/pco "
 COMMAND_FILES+="$DIR/peco-commands/pf "
 
@@ -34,6 +35,7 @@ FPATH=\$HOME/.zsh-utils:\$FPATH
 autoload -Uz zsh-utils && zsh-utils
 ## bindkey
 bindkey '^g' gcd
+bindkey '^u' pcdr
 bindkey '^r' phis
 EOM
 )
