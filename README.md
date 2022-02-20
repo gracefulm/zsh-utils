@@ -58,6 +58,7 @@ Second of all, you need to install below in advance.
 ## Installation
 
 ```shell
-https://github.com/masaki-miura/zsh-utils.git
+git clone https://github.com/masaki-miura/zsh-utils.git
+cd zsh-utils
 ./install.sh
 ```
