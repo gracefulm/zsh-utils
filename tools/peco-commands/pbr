@@ -18,7 +18,7 @@ function pbr() {
         act    "choose action>"
     )
     # select branches with peco
-    readonly TARGET_BRANCH=$(git branch | peco --prompt "${prompts[gb]}" | sed -e "s/^\*\s*//g" | tr -d " ")
+    readonly TARGET_BRANCH=$(git branch | peco --prompt "${prompts[gb]}" | sed -e "s/^\*\s*//g" | tr -d " " | tr "\n" " ")
     # number of selected branches
     readonly BRANCH_NUM=`echo $TARGET_BRANCH | wc -w`
 
