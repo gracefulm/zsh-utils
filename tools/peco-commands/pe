@@ -9,7 +9,7 @@ function pe() {
         echo "Canceled or something went wrong" >&2
         return 1
     else
-        _exec-command "docker exec -it $_target_container /bin/bash"
+        _insert-command "docker exec -it $_target_container /bin/bash"
     fi
 }
 
