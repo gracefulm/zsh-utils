@@ -5,6 +5,6 @@ if zle; then
   CURSOR=$#BUFFER
   zle accept-line
 else
-  print -z $1
+  eval $1
 fi
 
