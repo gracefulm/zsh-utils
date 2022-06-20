@@ -7,4 +7,3 @@ if zle; then
 else
   print -z $1
 fi
-

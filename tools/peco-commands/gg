@@ -57,7 +57,7 @@ function gg() {
         if [[ "$action" = "${actions[edit]}" ]]; then
             echo "$action on $UNIQUED_FILES"
             eval vim $SELECTED_FILE_AND_LINES
-        elif [[ "$action" = "${actions[view]}" ]]; then 
+        elif [[ "$action" = "${actions[view]}" ]]; then
             echo "$action on $UNIQUED_FILES"
             eval bat $UNIQUED_FILES
         else
@@ -66,4 +66,3 @@ function gg() {
         fi
     fi
 }
-

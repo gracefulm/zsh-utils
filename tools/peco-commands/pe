@@ -12,4 +12,3 @@ function pe() {
         _insert-command "docker exec -it $_target_container /bin/bash"
     fi
 }
-

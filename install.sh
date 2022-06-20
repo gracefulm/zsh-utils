@@ -72,4 +72,3 @@ fi
 echo ""
 echo "That's it!"
 echo "Enjoy your terminal life!!"
-

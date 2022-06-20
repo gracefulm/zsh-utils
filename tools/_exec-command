@@ -7,4 +7,3 @@ if zle; then
 else
   eval $1
 fi
-

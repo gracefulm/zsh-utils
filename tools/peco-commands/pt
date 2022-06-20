@@ -17,4 +17,3 @@ function pt() {
         tmux attach-session -t $_selected_session
     fi
 }
-

@@ -21,4 +21,3 @@ function gcd() {
         _exec-command "cd $_project_path"
     fi
 }
-
