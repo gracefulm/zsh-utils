@@ -10,4 +10,3 @@ function pk() {
         echo "Killd ${pid}"
     done
 }
-

@@ -16,4 +16,3 @@ function phis() {
         _insert-command $_target_command
     fi
 }
-

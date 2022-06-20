@@ -29,43 +29,58 @@ function pgl() {
     if [ $_selected_num -eq 1 ]; then
 		action=`echo -e "${actions[output]}\n${actions[pbcopy]}\n${actions[checkout]}\n${actions[cherrypick]}\n${actions[resethard]}" | peco --prompt "${prompts[act]}"`
 		if [[ "$action" = "${actions[output]}" ]]; then
-			echo $_commit_id
+			_exec-command "echo $_commit_id"
 		elif [[ "$action" = "${actions[pbcopy]}" ]]; then
-			echo "$action on $_trimmed_line_commit_id"
-			echo $_commit_id | pbcopy
+			_echo "$action on $_trimmed_line_commit_id"
+			_exec-command "echo $_commit_id | pbcopy"
 		elif [[ "$action" = "${actions[checkout]}" ]]; then
-			echo "$action on $_trimmed_line_commit_id"
-			eval git checkout $_trimmed_line_commit_id
+			_echo "$action on $_trimmed_line_commit_id"
+			_exec-command "git checkout $_trimmed_line_commit_id"
 		elif [[ "$action" = "${actions[cherrypick]}" ]]; then
-			echo "$action on $_trimmed_line_commit_id"
-			eval git cherry-pick $_trimmed_line_commit_id
+			_echo "$action on $_trimmed_line_commit_id"
+			_exec-command "git cherry-pick $_trimmed_line_commit_id"
 		elif [[ "$action" = "${actions[resethard]}" ]]; then
-			echo "$action on $_trimmed_line_commit_id"
-			printf "Are you sure? [y/n] > "
-			if read -q; then
-				echo ""
-				eval git reset --hard $_trimmed_line_commit_id
+			if zle; then
+				_insert-command "git reset --hard $_trimmed_line_commit_id"
 			else
-				return 0
+				echo "$action on $_trimmed_line_commit_id"
+				printf "Are you sure? [y/n] > "
+				if read -q; then
+					echo ""
+					eval git reset --hard $_trimmed_line_commit_id
+				else
+					return 0
+				fi
 			fi
 		else
-			echo "Canceled or somthing went wrong" >&2
+			_print-error-message
 			return 1
 		fi
 	elif [ $_selected_num -gt 1 ]; then
 		action=`echo -e "${actions[output]}\n${actions[pbcopy]}" | peco --prompt "${prompts[act]}"`
 		if [[ "$action" = "${actions[output]}" ]]; then
-			echo $_commit_id
+			if zle; then
+				_exec-command "echo $_trimmed_line_commit_id"
+			else
+				echo $_commit_id
+			fi
 		elif [[ "$action" = "${actions[pbcopy]}" ]]; then
-			echo "$action on $_trimmed_line_commit_id"
-			echo $_commit_id | pbcopy
+			if zle; then
+				_exec-command "echo $_trimmed_line_commit_id | pbcopy"
+			else
+				echo "$action on $_trimmed_line_commit_id"
+				echo $_commit_id | pbcopy
+			fi
 		else
-			echo "Canceled or somthing went wrong" >&2
+			_print-error-message
 			return 1
 		fi
     else
-        echo "Canceled or something went wrong" >&2
+        _print-error-message
         return 1
     fi
 }
 
+function _print-error-message() {
+	_write-stderror "Canceled or something went wrong"
+}
