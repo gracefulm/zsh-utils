@@ -43,6 +43,8 @@ Second of all, you need to install below in advance.
     -d               Search for directories under the current directory
     ```
 
+  - **pgl**
+    - pgl is a function that enable to show git log and do some actions on selected commit
   - **phis**
     - phis is a function that enable to select a command that was executed in the past
   - **pk**
