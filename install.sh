@@ -15,8 +15,10 @@ readonly TARGET_DIR="$HOME/.zsh-utils"
 # paths of command files that will install
 readonly CURRENT_DIR=$(cd $(dirname $0); pwd)
 readonly DIR=$(cd $(dirname $0)/tools; pwd)
-COMMAND_FILES="$DIR/_exec-command "
+COMMAND_FILES="$DIR/_echo "
+COMMAND_FILES+="$DIR/_exec-command "
 COMMAND_FILES+="$DIR/_insert-command "
+COMMAND_FILES+="$DIR/_write-stderror "
 COMMAND_FILES+="$DIR/show256 "
 COMMAND_FILES+="$DIR/google "
 COMMAND_FILES+="$DIR/peco-commands/gcd "
@@ -42,6 +44,7 @@ autoload -Uz zsh-utils && zsh-utils
 bindkey '^g' gcd
 bindkey '^u' pcdr
 bindkey '^r' phis
+bindkey 'LL' pgl
 EOM
 )
 
