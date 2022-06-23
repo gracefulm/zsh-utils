@@ -9,6 +9,7 @@ function pgl() {
 	actions=(
 		output     ">> output"
 		pbcopy     ">> pbcopy"
+		show       ">> show"
 		checkout   ">> checkout"
 		cherrypick ">> cherry-pick"
 		resethard  ">> reset-hard"
@@ -27,7 +28,7 @@ function pgl() {
 
     # select a condition from the menu and execute the action
     if [ $_selected_num -eq 1 ]; then
-		action=`echo -e "${actions[output]}\n${actions[pbcopy]}\n${actions[checkout]}\n${actions[cherrypick]}\n${actions[resethard]}" | peco --prompt "${prompts[act]}"`
+		action=`echo -e "${actions[output]}\n${actions[pbcopy]}\n${actions[show]}\n${actions[checkout]}\n${actions[cherrypick]}\n${actions[resethard]}}" | peco --prompt "${prompts[act]}"`
 		if [[ "$action" = "${actions[output]}" ]]; then
 			_exec-command "echo $_commit_id"
 		elif [[ "$action" = "${actions[pbcopy]}" ]]; then
@@ -36,6 +37,9 @@ function pgl() {
 		elif [[ "$action" = "${actions[checkout]}" ]]; then
 			_echo "$action on $_trimmed_line_commit_id"
 			_exec-command "git checkout $_trimmed_line_commit_id"
+		elif [[ "$action" = "${actions[show]}" ]]; then
+			_echo "$action on $_trimmed_line_commit_id"
+			_exec-command "git show $_trimmed_line_commit_id"
 		elif [[ "$action" = "${actions[cherrypick]}" ]]; then
 			_echo "$action on $_trimmed_line_commit_id"
 			_exec-command "git cherry-pick $_trimmed_line_commit_id"
