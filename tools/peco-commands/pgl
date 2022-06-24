@@ -28,7 +28,7 @@ function pgl() {
 
     # select a condition from the menu and execute the action
     if [ $_selected_num -eq 1 ]; then
-		action=`echo -e "${actions[output]}\n${actions[pbcopy]}\n${actions[show]}\n${actions[checkout]}\n${actions[cherrypick]}\n${actions[resethard]}}" | peco --prompt "${prompts[act]}"`
+		action=`echo -e "${actions[output]}\n${actions[pbcopy]}\n${actions[show]}\n${actions[checkout]}\n${actions[cherrypick]}\n${actions[resethard]}" | peco --prompt "${prompts[act]}"`
 		if [[ "$action" = "${actions[output]}" ]]; then
 			_exec-command "echo $_commit_id"
 		elif [[ "$action" = "${actions[pbcopy]}" ]]; then
