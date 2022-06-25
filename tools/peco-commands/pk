@@ -1,12 +1,52 @@
 #!/bin/zsh -e
 
 #
-# pk is a function that kill selected processes
+# pk is a function that kill selected processes or just output selected pids
 #
 function pk() {
-    for pid in `ps aux | peco --prompt "pkill>" | awk '{ print $2 }'`
-    do
-        kill $pid
-        echo "Killd ${pid}"
-    done
+    # actions on target pid
+    typeset -A actions
+    actions=(
+        output    ">> output"
+        kill     ">> kill"
+    )
+    # prompt of peco
+    typeset -A prompts
+    prompts=(
+        pk    "processes>"
+        act   "choose action>"
+    )
+
+    # selected pids
+    readonly _pids=`ps aux | peco --prompt "${prompts[pk]}" | awk '{ print $2 }'`
+    readonly _selected_num=`echo $_pids | wc -w`
+    if [ $_selected_num -eq 0 ]; then
+        _write-stderror "Did not hit or canceled"
+        return 1
+    else
+        action=`echo -e "${actions[output]}\n${actions[kill]}" | peco --prompt "${prompts[act]}"`
+        if [ "$action" = "${actions[output]}" ]; then
+            echo $_pids
+        elif [ "$action" = "${actions[kill]}" ]; then
+            target_pids=`echo $_pids | tr "\n" " "`
+            echo "$action on $target_pids"
+            for pid in `echo $target_pids`
+            do
+                _kill ${pid}
+            done
+        else
+            _print-error-message
+            return 1
+        fi
+    fi
 }
+
+function _kill() {
+    if [ $1 = "PID" ]; then
+        echo "skipped header line"
+    else
+        kill $1
+        echo "Killed: pid=$1"
+    fi
+}
+

@@ -48,7 +48,7 @@ Second of all, you need to install below in advance.
   - **phis**
     - phis is a function that enable to select a command that was executed in the past
   - **pk**
-    - pk is a function that kill selected processes
+    - pk is a function that kill or just output selected processes
   - **pt**
     - pt is a function that can be attached to tmux session
 - other functions
