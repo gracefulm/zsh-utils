@@ -24,7 +24,7 @@ function pbr() {
 
     # select a condition from the menu and execute the action
     if [ ${#TARGET_BRANCH} -eq 0 ]; then
-        echo "Did not hit or canceled" >&2
+        _write-stderror "Did not hit or canceled"
         return 1
     elif [ $BRANCH_NUM -gt 1 ]; then
         action="`echo -e "${actions[delete]}\n${actions[delete-force]}" | peco --prompt "${prompts[act]}"`"
@@ -35,7 +35,7 @@ function pbr() {
             echo "$action on $TARGET_BRANCH"
             eval git branch -D $TARGET_BRANCH
         else
-            echo "Canceled or something went wrong" >&2
+            _print-error-message
             return 1
         fi
     else
@@ -50,7 +50,7 @@ function pbr() {
             echo "$action on $TARGET_BRANCH"
             eval git branch -D $TARGET_BRANCH
         else
-            echo "Canceled or something went wrong" >&2
+            _print-error-message
             return 1
         fi
     fi
