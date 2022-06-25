@@ -6,12 +6,8 @@
 function pcdr() {
     local _target_dir="$(cdr -l | peco --prompt "cdr>" | awk '{print $2}')"
     if [ ${#_target_dir} -eq 0 ]; then
-        if zle; then
-            :
-        else
-            echo "Canceled or something went wrong" >&2
-            return 1
-        fi
+        _print-error-message
+        return 1
     else
         _exec-command "cd ${_target_dir}"
     fi
