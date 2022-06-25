@@ -10,12 +10,8 @@ function gcd() {
 
     # move to the selected git project
     if [ ${#_context_path} -eq 0 ]; then
-        if zle; then
-            :
-        else
-            echo "Canceled or something went wrong" >&2
-            return 1
-        fi
+        _print-error-message
+		return 1
     else
         # target git project directory path
         _exec-command "cd $_project_path"

@@ -18,6 +18,7 @@ readonly DIR=$(cd $(dirname $0)/tools; pwd)
 COMMAND_FILES="$DIR/_echo "
 COMMAND_FILES+="$DIR/_exec-command "
 COMMAND_FILES+="$DIR/_insert-command "
+COMMAND_FILES+="$DIR/_print-error-message "
 COMMAND_FILES+="$DIR/_write-stderror "
 COMMAND_FILES+="$DIR/show256 "
 COMMAND_FILES+="$DIR/google "

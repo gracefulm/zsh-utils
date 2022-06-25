@@ -38,7 +38,7 @@ function pff() {
     local _selected_files=`find . -type f | peco --prompt "${prompts[pff]}" | tr "\n" " "`
     local _selected_files_num=`echo $_selected_files | wc -w`
     if [ $_selected_files_num -eq 0 ]; then
-        echo "Did not hit or canceled" >&2
+        _write-stderror "Did not hit or canceled"
         return 1
     elif [ $_selected_files_num -gt 1 ]; then
         action="`echo -e "${actions[view]}\n${actions[edit-buffer]}" | peco --prompt "${prompts[act]}"`"
@@ -49,8 +49,7 @@ function pff() {
             echo "$action on $_selected_files"
             eval bat $_selected_files
         else
-            echo "Canceled or something went wrong" >&2
-        return 1
+            _print-error-message
             return 1
         fi
     else
@@ -62,7 +61,7 @@ function pff() {
             echo "$action on $_selected_files"
             eval bat $_selected_files
         else
-            echo "Canceled or something went wrong" >&2
+            _print-error-message
             return 1
         fi
     fi
@@ -73,10 +72,10 @@ function pfd() {
     local _selected_directories=`find . -type d | peco --prompt "${prompts[pfd]}" | tr "\n" " "`
     local _selected_directories_num=`echo $_selected_directories | wc -w`
     if [ $_selected_directories_num -eq 0 ]; then
-        echo "Did not hit or canceled" >&2
+        _write-stderror "Did not hit or canceled"
         return 1
     elif [ $_selected_directories_num -gt 1 ]; then
-        echo "You can choose just one directory" >&2
+        _write-stderror "You can choose just one directory"
         return 1
     else
         action="`echo -e "${actions[list]}\n${actions[change-dir]}" | peco --prompt "${prompts[act]}"`"
@@ -87,7 +86,7 @@ function pfd() {
             echo "$action on $_selected_directories"
             _exec-command "cd $_selected_directories"
         else
-            echo "Canceled or something went wrong" >&2
+            _print-error-message
             return 1
         fi
     fi
@@ -113,3 +112,4 @@ else
         return 1
     fi
 fi
+

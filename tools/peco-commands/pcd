@@ -6,7 +6,7 @@
 function pcd() {
     local _target_dir="$(ls -al | grep -E "^d" | peco --prompt "movet to>" | awk "{print \$9}")"
     if [ ${#_target_dir} -eq 0 ]; then
-        echo "Canceled or something went wrong" >&2
+        _print-error-message
         return 1
     else
         _exec-command "cd $_target_dir"
