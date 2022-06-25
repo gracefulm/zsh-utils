@@ -1,0 +1,3 @@
+# !/bin/zsh -e
+
+_write-stderror "Canceled or something went wrong"

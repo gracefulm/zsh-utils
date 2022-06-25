@@ -84,7 +84,3 @@ function pgl() {
         return 1
     fi
 }
-
-function _print-error-message() {
-	_write-stderror "Canceled or something went wrong"
-}
