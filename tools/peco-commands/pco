@@ -8,7 +8,7 @@ function pco() {
 
     # select a condition from the menu and execute the action
     if [ -z $_target_branch ]; then
-        echo "Canceled or something went wrong" >&2
+        _print-error-message
         return 1
     else
         git checkout $_target_branch
