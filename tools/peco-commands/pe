@@ -6,7 +6,7 @@
 function pe() {
     local _target_container="$(docker ps | peco --prompt "docker container>" | cut -d " " -f 1)"
     if [ ${#_target_container} -eq 0 ]; then
-        echo "Canceled or something went wrong" >&2
+        _print-error-message
         return 1
     else
         _insert-command "docker exec -it $_target_container /bin/bash"
