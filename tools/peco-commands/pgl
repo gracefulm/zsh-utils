@@ -4,81 +4,81 @@
 # pgl is a function that enable to show git log and do several actions on selected commit
 #
 function pgl() {
-	# actions on target commit
-	typeset -A actions
-	actions=(
-		output     ">> output"
-		pbcopy     ">> pbcopy"
-		show       ">> show"
-		checkout   ">> checkout"
-		cherrypick ">> cherry-pick"
-		resethard  ">> reset-hard"
-	)
-	# prompt of peco
-	typeset -A prompts
-	prompts=(
-		gl    "git log>"
-		act   "choose action>"
-	)
-	# select commit with peco
-	readonly _target_commit=$(git log --graph --all --pretty=format:'%x09%C(yellow)%h %C(red)[%ad]%C(auto)%d %C(white)%s' --date=format:'%Y/%m/%d %H:%M:%S' | peco --prompt "${prompts[gl]}" | sed -E "s/[\|\*\\ \/]+//" | sed "/^$/d")
-	readonly _commit_id=$(echo $_target_commit | awk '{print $1}')
-	readonly _trimmed_line_commit_id=$(echo $_commit_id | tr "\n" " ")
-	readonly _selected_num=`echo $_trimmed_line_commit_id | wc -w`
+    # actions on target commit
+    typeset -A actions
+    actions=(
+        output     ">> output"
+        pbcopy     ">> pbcopy"
+        show       ">> show"
+        checkout   ">> checkout"
+        cherrypick ">> cherry-pick"
+        resethard  ">> reset-hard"
+    )
+    # prompt of peco
+    typeset -A prompts
+    prompts=(
+        gl    "git log>"
+        act   "choose action>"
+    )
+    # select commit with peco
+    readonly _target_commit=$(git log --graph --all --pretty=format:'%x09%C(yellow)%h %C(red)[%ad]%C(auto)%d %C(white)%s' --date=format:'%Y/%m/%d %H:%M:%S' | peco --prompt "${prompts[gl]}" | sed -E "s/[\|\*\\ \/]+//" | sed "/^$/d")
+    readonly _commit_id=$(echo $_target_commit | awk '{print $1}')
+    readonly _trimmed_line_commit_id=$(echo $_commit_id | tr "\n" " ")
+    readonly _selected_num=`echo $_trimmed_line_commit_id | wc -w`
 
     # select a condition from the menu and execute the action
     if [ $_selected_num -eq 1 ]; then
-		action=`echo -e "${actions[output]}\n${actions[pbcopy]}\n${actions[show]}\n${actions[checkout]}\n${actions[cherrypick]}\n${actions[resethard]}" | peco --prompt "${prompts[act]}"`
-		if [[ "$action" = "${actions[output]}" ]]; then
-			_exec-command "echo $_commit_id"
-		elif [[ "$action" = "${actions[pbcopy]}" ]]; then
-			_echo "$action on $_trimmed_line_commit_id"
-			_exec-command "echo $_commit_id | pbcopy"
-		elif [[ "$action" = "${actions[checkout]}" ]]; then
-			_echo "$action on $_trimmed_line_commit_id"
-			_exec-command "git checkout $_trimmed_line_commit_id"
-		elif [[ "$action" = "${actions[show]}" ]]; then
-			_echo "$action on $_trimmed_line_commit_id"
-			_exec-command "git show $_trimmed_line_commit_id"
-		elif [[ "$action" = "${actions[cherrypick]}" ]]; then
-			_echo "$action on $_trimmed_line_commit_id"
-			_exec-command "git cherry-pick $_trimmed_line_commit_id"
-		elif [[ "$action" = "${actions[resethard]}" ]]; then
-			if zle; then
-				_insert-command "git reset --hard $_trimmed_line_commit_id"
-			else
-				echo "$action on $_trimmed_line_commit_id"
-				printf "Are you sure? [y/n] > "
-				if read -q; then
-					echo ""
-					eval git reset --hard $_trimmed_line_commit_id
-				else
-					return 0
-				fi
-			fi
-		else
-			_print-error-message
-			return 1
-		fi
-	elif [ $_selected_num -gt 1 ]; then
-		action=`echo -e "${actions[output]}\n${actions[pbcopy]}" | peco --prompt "${prompts[act]}"`
-		if [[ "$action" = "${actions[output]}" ]]; then
-			if zle; then
-				_exec-command "echo $_trimmed_line_commit_id"
-			else
-				echo $_commit_id
-			fi
-		elif [[ "$action" = "${actions[pbcopy]}" ]]; then
-			if zle; then
-				_exec-command "echo $_trimmed_line_commit_id | pbcopy"
-			else
-				echo "$action on $_trimmed_line_commit_id"
-				echo $_commit_id | pbcopy
-			fi
-		else
-			_print-error-message
-			return 1
-		fi
+        action=`echo -e "${actions[output]}\n${actions[pbcopy]}\n${actions[show]}\n${actions[checkout]}\n${actions[cherrypick]}\n${actions[resethard]}" | peco --prompt "${prompts[act]}"`
+        if [[ "$action" = "${actions[output]}" ]]; then
+            _exec-command "echo $_commit_id"
+        elif [[ "$action" = "${actions[pbcopy]}" ]]; then
+            _echo "$action on $_trimmed_line_commit_id"
+            _exec-command "echo $_commit_id | pbcopy"
+        elif [[ "$action" = "${actions[checkout]}" ]]; then
+            _echo "$action on $_trimmed_line_commit_id"
+            _exec-command "git checkout $_trimmed_line_commit_id"
+        elif [[ "$action" = "${actions[show]}" ]]; then
+            _echo "$action on $_trimmed_line_commit_id"
+            _exec-command "git show $_trimmed_line_commit_id"
+        elif [[ "$action" = "${actions[cherrypick]}" ]]; then
+            _echo "$action on $_trimmed_line_commit_id"
+            _exec-command "git cherry-pick $_trimmed_line_commit_id"
+        elif [[ "$action" = "${actions[resethard]}" ]]; then
+            if zle; then
+                _insert-command "git reset --hard $_trimmed_line_commit_id"
+            else
+                echo "$action on $_trimmed_line_commit_id"
+                printf "Are you sure? [y/n] > "
+                if read -q; then
+                    echo ""
+                    eval git reset --hard $_trimmed_line_commit_id
+                else
+                    return 0
+                fi
+            fi
+        else
+            _print-error-message
+            return 1
+        fi
+    elif [ $_selected_num -gt 1 ]; then
+        action=`echo -e "${actions[output]}\n${actions[pbcopy]}" | peco --prompt "${prompts[act]}"`
+        if [[ "$action" = "${actions[output]}" ]]; then
+            if zle; then
+                _exec-command "echo $_trimmed_line_commit_id"
+            else
+                echo $_commit_id
+            fi
+        elif [[ "$action" = "${actions[pbcopy]}" ]]; then
+            if zle; then
+                _exec-command "echo $_trimmed_line_commit_id | pbcopy"
+            else
+                echo "$action on $_trimmed_line_commit_id"
+                echo $_commit_id | pbcopy
+            fi
+        else
+            _print-error-message
+            return 1
+        fi
     else
         _print-error-message
         return 1
