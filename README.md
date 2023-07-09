@@ -30,6 +30,8 @@ Second of all, you need to install below in advance.
     - pcdr is a function that can easily move to the directory that you moved in the past
   - **pco**
     - pco is a function that enable to do git checkout easily
+  - **pdi**
+    - pdi is a function that enable to do some actions to docker images
   - **pe**
     - pe is a function that enable to enter the selected container
   - **pf**
@@ -61,5 +63,6 @@ Second of all, you need to install below in advance.
 
 ```shell
 https://github.com/masaki-miura/zsh-utils.git
+cd zsh-utils
 ./install.sh
 ```
