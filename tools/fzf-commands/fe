@@ -1,0 +1,18 @@
+#!/bin/zsh -e
+
+#
+# fe is a function that enable to enter the selected container
+#
+function fe() {
+    local _target_container="$(docker ps | fzf --prompt "docker container> " | cut -d " " -f 1)"
+    local _selected_num=`echo $_target_container | wc -w`
+    if [ ${#_target_container} -eq 0 ] || [ ${_target_container} = "CONTAINER" ]; then
+        _print-error-message
+        return 1
+    elif [ $_selected_num -gt 1 ]; then
+        _write-stderror "You can choose just one container"
+		return 1
+    else
+        _insert-command "docker exec -it $_target_container /bin/bash"
+    fi
+}

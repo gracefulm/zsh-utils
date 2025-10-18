@@ -1,0 +1,57 @@
+#!/bin/zsh -e
+
+#
+# fbr is a function that enable to operate git branch efficiently.
+#
+function fbr() {
+    # actions on target branches
+    typeset -A actions
+    actions=(
+        delete          ">> delete"
+        delete-force    ">> delete(force)"
+        switch          ">> switch"
+    )
+    #prompt of fzf
+    typeset -A prompts
+    prompts=(
+        gb     "git branch> "
+        act    "choose action> "
+    )
+    # select branches with fzf
+    readonly TARGET_BRANCH=$(git branch | fzf --multi --prompt "${prompts[gb]}" | sed -e "s/^\*\s*//g" | tr -d " " | tr "\n" " ")
+    # number of selected branches
+    readonly BRANCH_NUM=`echo $TARGET_BRANCH | wc -w`
+
+    # select a condition from the menu and execute the action
+    if [ ${#TARGET_BRANCH} -eq 0 ]; then
+        _write-stderror "Did not hit or canceled"
+        return 1
+    elif [ $BRANCH_NUM -gt 1 ]; then
+        action="`echo -e "${actions[delete]}\n${actions[delete-force]}" | fzf --prompt "${prompts[act]}"`"
+        if [[ "$action" = "${actions[delete]}" ]]; then
+            echo "$action on $TARGET_BRANCH"
+            eval git branch -d $TARGET_BRANCH
+        elif [[ "$action" = "${actions[delete-force]}" ]]; then
+            echo "$action on $TARGET_BRANCH"
+            eval git branch -D $TARGET_BRANCH
+        else
+            _print-error-message
+            return 1
+        fi
+    else
+        action="`echo -e "${actions[switch]}\n${actions[delete]}\n${actions[delete-force]}" | fzf --prompt "${prompts[act]}"`"
+        if [[ "$action" = "${actions[switch]}" ]]; then
+            echo "$action on $TARGET_BRANCH"
+            eval git switch $TARGET_BRANCH
+        elif [[ "$action" = "${actions[delete]}" ]]; then
+            echo "$action on $TARGET_BRANCH"
+            eval git branch -d $TARGET_BRANCH
+        elif [[ "$action" = "${actions[delete-force]}" ]]; then
+            echo "$action on $TARGET_BRANCH"
+            eval git branch -D $TARGET_BRANCH
+        else
+            _print-error-message
+            return 1
+        fi
+    fi
+}

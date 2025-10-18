@@ -1,0 +1,19 @@
+#!/bin/zsh -e
+
+#
+# fcd is a function that enable to move  efficiently to a project managed by ghq.
+#
+function gcd() {
+    readonly _root=$(ghq root)
+    readonly _context_path=$(ghq list | fzf --prompt "git repository> ")
+    readonly _project_path=$_root/$_context_path
+
+    # move to the selected git project
+    if [ ${#_context_path} -eq 0 ]; then
+        _print-error-message
+		return 1
+    else
+        # target git project directory path
+        _exec-command "cd $_project_path"
+    fi
+}

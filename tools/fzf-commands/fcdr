@@ -1,0 +1,14 @@
+#!/bin/zsh -e
+
+#
+# fcdr is a function that can easily move to the directory that you moved in the past
+#
+function fcdr() {
+    local _target_dir="$(cdr -l | fzf --prompt "cdr> " | awk '{print $2}')"
+    if [ ${#_target_dir} -eq 0 ]; then
+        _print-error-message
+        return 1
+    else
+        _exec-command "cd ${_target_dir}"
+    fi
+}
