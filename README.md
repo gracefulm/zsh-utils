@@ -12,10 +12,33 @@ Second of all, you need to install below in advance.
 - docker
 - ghq
 - peco
+- fzf
 - tmux
 - vim
 
 ## Contents of tools
+
+- function with fzf
+  - **gcd**
+    - gcd is a function that enable to move efficiently to a project managed by ghq
+  - **fbr**
+    - fbr is a function that enable to operate git branch efficiently
+  - **fcdr**
+    - fcdr is a function that can easily move to the directory that you moved in the past
+  - **fco**
+    - fco is a function that enable to do git checkout easily
+  - **fe**
+    - fe is a function that enable to enter the selected container
+  - **ff**
+    - ff is a function that enable to operate selected file/directory
+    - ff has some options
+
+    ```shell
+    Usage: ff [-h | --help] [-f] [-d]
+    -h | --help      Display this command usage
+    -f               Search for files under the current directory
+    -d               Search for directories under the current directory
+    ```
 
 - functions with peco
   - **gcd**
@@ -65,4 +88,10 @@ Second of all, you need to install below in advance.
 git clone https://github.com/masaki-miura/zsh-utils.git
 cd zsh-utils
 ./install.sh
+```
+
+## Uninstallation
+
+```sh
+./uninstall.sh
 ```

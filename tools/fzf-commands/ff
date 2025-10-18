@@ -34,7 +34,7 @@ EOM
 }
 
 # find files
-function pff() {
+function fff() {
     local _selected_files=`find . -path ./.git -prune -o -type f | fzf --prompt "${prompts[pff]}" --preview 'bat --color=always {}' | tr "\n" " "`
     local _selected_files_num=`echo $_selected_files | wc -w`
     if [ $_selected_files_num -eq 0 ]; then
@@ -68,7 +68,7 @@ function pff() {
 }
 
 # find directories
-function pfd() {
+function ffd() {
     local _selected_directories=`find . -path ./.git -prune -o -type d | fzf --prompt "${prompts[pfd]}" | tr "\n" " "`
     local _selected_directories_num=`echo $_selected_directories | wc -w`
     if [ $_selected_directories_num -eq 0 ]; then
