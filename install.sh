@@ -52,19 +52,17 @@ if [ "$1" = "--peco-primary" ]; then
     COMMAND_FILES+="$DIR/peco-commands/pt "
 else
     # default case: fzf is used as the primary prompt
-    # TODO: implement fzf-commands
     COMMAND_FILES+="$DIR/fzf-commands/gcd "
-    COMMAND_FILES+="$DIR/peco-commands/gg "
+    COMMAND_FILES+="$DIR/fzf-commands/gg "
     COMMAND_FILES+="$DIR/fzf-commands/fbr "
-    COMMAND_FILES+="$DIR/peco-commands/pcd "
     COMMAND_FILES+="$DIR/fzf-commands/fcdr "
     COMMAND_FILES+="$DIR/fzf-commands/fco "
-    COMMAND_FILES+="$DIR/peco-commands/pdi "
+    COMMAND_FILES+="$DIR/fzf-commands/fdi "
     COMMAND_FILES+="$DIR/fzf-commands/fe "
     COMMAND_FILES+="$DIR/fzf-commands/ff "
-    COMMAND_FILES+="$DIR/peco-commands/pgl "
-    COMMAND_FILES+="$DIR/peco-commands/pk "
-    COMMAND_FILES+="$DIR/peco-commands/pt "
+    COMMAND_FILES+="$DIR/fzf-commands/fgl "
+    COMMAND_FILES+="$DIR/fzf-commands/fk "
+    COMMAND_FILES+="$DIR/fzf-commands/ft "
 fi
 
 
@@ -77,7 +75,7 @@ autoload -Uz zsh-utils && zsh-utils
 ## bindkey
 bindkey '^g' gcd
 bindkey '^u' fcdr
-bindkey 'LL' pgl
+bindkey 'LL' fgl
 ## fzf completion
 source <(fzf --zsh)
 export FZF_DEFAULT_OPTS="--layout=reverse --inline-info --style full --height ~50%"
