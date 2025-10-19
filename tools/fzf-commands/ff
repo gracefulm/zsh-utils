@@ -1,0 +1,114 @@
+#!/bin/zsh -e
+
+#
+# define constants
+#
+readonly COMMAND_NAME=$(basename "$0")
+readonly COLOR_RED=$(printf "\033[38;5;1m")
+readonly COLOR_OFF=$(printf "\033[m")
+
+typeset -A actions
+actions=(
+    view ">> view"
+    edit ">> edit"
+    edit-buffer ">> edit(with buffer)"
+    list ">> ls"
+    change-dir ">> cd"
+)
+typeset -A prompts
+prompts=(
+    pf "find> "
+    pff "find file> "
+    pfd "find directory> "
+    act "choose action> "
+)
+
+# help
+function usage() {
+    cat <<EOM
+Usage: $COMMAND_NAME [-h | --help] [-f] [-d]
+    -h | --help      Display this command usage
+    -f               Search for files under the current directory
+    -d               Search for directories under the current directory
+EOM
+}
+
+# find files
+function fff() {
+    local _selected_files=`find . -path ./.git -prune -o -type f | fzf --prompt "${prompts[pff]}" --preview 'bat --color=always {}' | tr "\n" " "`
+    local _selected_files_num=`echo $_selected_files | wc -w`
+    if [ $_selected_files_num -eq 0 ]; then
+        _write-stderror "Did not hit or canceled"
+        return 1
+    elif [ $_selected_files_num -gt 1 ]; then
+        action="`echo -e "${actions[view]}\n${actions[edit-buffer]}" | fzf --prompt "${prompts[act]}"`"
+        if [[ "$action" = "${actions[edit-buffer]}" ]]; then
+            echo "$action on $_selected_files"
+            eval vim $_selected_files
+        elif [[ "$action" = "${actions[view]}" ]]; then
+            echo "$action on $_selected_files"
+            eval bat $_selected_files
+        else
+            _print-error-message
+            return 1
+        fi
+    else
+        action="`echo -e "${actions[view]}\n${actions[edit]}" | fzf --prompt "${prompts[act]}"`"
+        if [[ "$action" = "${actions[edit]}" ]]; then
+            echo "$action on $_selected_files"
+            eval vim $_selected_files
+        elif [[ "$action" = "${actions[view]}" ]]; then
+            echo "$action on $_selected_files"
+            eval bat $_selected_files
+        else
+            _print-error-message
+            return 1
+        fi
+    fi
+}
+
+# find directories
+function ffd() {
+    local _selected_directories=`find . -path ./.git -prune -o -type d | fzf --prompt "${prompts[pfd]}" | tr "\n" " "`
+    local _selected_directories_num=`echo $_selected_directories | wc -w`
+    if [ $_selected_directories_num -eq 0 ]; then
+        _write-stderror "Did not hit or canceled"
+        return 1
+    elif [ $_selected_directories_num -gt 1 ]; then
+        _write-stderror "You can choose just one directory"
+        return 1
+    else
+        action="`echo -e "${actions[list]}\n${actions[change-dir]}" | fzf --prompt "${prompts[act]}"`"
+        if [[ "$action" = "${actions[list]}" ]]; then
+            echo "$action on $_selected_directories"
+            eval ls -FGla $_selected_directories
+        elif [[ "$action" = "${actions[change-dir]}" ]]; then
+            echo "$action on $_selected_directories"
+            _exec-command "cd $_selected_directories"
+        else
+            _print-error-message
+            return 1
+        fi
+    fi
+}
+
+# separate processing for each option
+if [ $# -eq 0 ]; then
+    find . | fzf --prompt "${prompts[pf]}"
+elif [ $# -gt 1 ]; then
+    echo "${COLOR_RED}ERROR: too many arguments${COLOR_OFF}" >&2
+    usage
+    return 1
+else
+    if [ $1 = "-h" -o $1 = "--help" ]; then
+        usage
+    elif [ $1 = "-f" ]; then
+        pff
+    elif [ $1 = "-d" ]; then
+        pfd
+    else
+        echo "${COLOR_RED}ERROR: invalid option [$1]${COLOR_OFF}" >&2
+        usage
+        return 1
+    fi
+fi

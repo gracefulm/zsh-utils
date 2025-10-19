@@ -1,0 +1,16 @@
+#!/bin/zsh -e
+
+#
+# fco is a function that enable to do git checkout easily
+#
+function fco() {
+    readonly _target_branch=$(git branch | fzf --prompt "git branch> " | head -n 1 | sed -e "s/^\*\s*//g" | tr -d " ")
+
+    # select a condition from the menu and execute the action
+    if [ -z $_target_branch ]; then
+        _print-error-message
+        return 1
+    else
+        git checkout $_target_branch
+    fi
+}

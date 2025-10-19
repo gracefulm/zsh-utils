@@ -1,0 +1,54 @@
+#!/bin/zsh -e
+
+#
+# fdi is a function that enable to do something to docker images
+#
+function fdi() {
+    # actions
+    typeset -A first_actions
+    first_actions=(
+        prune          ">> prune"
+        ls             ">> ls"
+    )
+    typeset -A second_actions
+    second_actions=(
+        rm          ">> rm"
+        print       ">> print"
+    )
+    # prompt of fzf
+    typeset -A prompts
+    prompts=(
+        first_prompt     "choose action> "
+        second_prompt    "choose action> "
+    )
+    first_action="`echo -e "${first_actions[prune]}\n${first_actions[ls]}" | fzf --prompt "${prompts[first_prompt]}" | awk '{ print $2 }'`"
+
+    if [ ${#first_action} -eq 0 ]; then
+        _print-error-message
+        return 1
+    elif [ $(echo $first_action | wc -w) -gt 1 ]; then
+        _write-stderror "You can choose just one action"
+        return 1
+    elif [ $first_action = "prune" ]; then
+        _exec-command "docker image prune"
+    else
+        target_images="$(docker images | fzf --multi --prompt "docker images> " | awk '{ print $3 }' | tr "\n" " ")"
+        if [ ${#target_images} -eq 0 ] || [ ${target_images} = "IMAGE" ]; then
+            _print-error-message
+            return 1
+        else
+            second_action="`echo -e "${second_actions[rm]}\n${second_actions[print]}" | fzf --prompt "${prompts[second_prompt]}" | awk '{ print $2 }'`"
+            if [ $(echo $second_action | wc -w) -gt 1 ]; then
+                _write-stderror "You can choose just one action"
+                return 1
+            elif [ $second_action = "rm" ]; then
+                _exec-command "docker image rm ${target_images}"
+            elif [ $second_action = "print" ]; then
+                _echo ${target_images}
+            else
+                _print-error-message
+                return 1
+            fi
+        fi
+    fi
+}

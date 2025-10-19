@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+#
+# ft is a function that can be attached to tmux session
+#
+function ft() {
+    local _sessions="$(tmux ls 2> /dev/null)"
+    if [ -z $_sessions ]; then
+        tmux new-session
+    else
+        local _new_session="Create a new session"
+        local _options="${_new_session}\n${_sessions}"
+        local _selected_session="$(echo -e "$_options" | fzf --prompt "tmux session> " | cut -d: -f1)"
+        if [ -z $_selected_session ]; then
+            _print-error-message
+            return 1
+        elif [ $_selected_session = "$_new_session" ]; then
+            tmux new-session
+        else
+            tmux attach-session -t $_selected_session
+        fi
+    fi
+}
